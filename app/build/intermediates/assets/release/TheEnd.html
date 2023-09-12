@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+    <script src="Smooth.js"></script>
+    <script>
+function PauseSounds() {
+    //Resume all audio
+}
+function ResumeSounds() {
+    //Pause all audio
+}
+    </script>
+    <script src="taptapir/taptapir.js"></script>
+<script src="taptapir-utility/slider.js"></script>
+<script type="text/sunsnake">
+
+#Global Functions
+set_orientation('horizontal')
+set_window_color('transparent')
+set_background_color('black')
+ASSETS_FOLDER = 'assets/'
+
+#Removes all data and saves the resets
+resets = save_system_load('resets')
+if resets == null:
+    resets=1
+else:
+    resets+=1
+
+save_system_clear()
+save_system_save('resets',resets)
+SmoothTransit("main")
+
+_hidden_fullscreen_button.xy = [213213213,123123123]
+</script>
+<script src="taptapir/sunsnake_compiler.js"></script></body>
+</html>

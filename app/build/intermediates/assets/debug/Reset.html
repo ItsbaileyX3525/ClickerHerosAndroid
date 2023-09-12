@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        body {
+          margin: 0;
+          transition: background-color 1s ease; /* Smooth transition over 1 second */
+        }
+      </style>
+<body>
+    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+    <script src="Smooth.js"></script>
+    <script>
+  let isRed = true;
+
+function toggleBackgroundColor() {
+  const body = document.body;
+  
+  if (isRed) {
+    body.style.backgroundColor = 'black';
+  } else {
+    body.style.backgroundColor = 'red';
+  }
+  
+  isRed = !isRed;
+}
+
+var background = setInterval(toggleBackgroundColor, 2000);
+song = new Audio('assets/TheEnd.ogg')
+song.play()
+function PauseSounds() {
+    song.pause()
+}
+function ResumeSounds() {
+    song.play()
+}
+    </script>
+    <script src="taptapir/taptapir.js"></script>
+<script src="taptapir-utility/slider.js"></script>
+<script type="text/sunsnake">
+
+#Global Functions
+set_orientation('horizontal')
+set_window_color('transparent')
+set_background_color('red')
+ASSETS_FOLDER = 'assets/'
+
+resetText = Text(x=.15,y=-.2,z=-1,text='Are you sure you want to reset the game?\n           (All progress will be lost.)')
+resetBackground = Entity(scale=[1.2,.4],y=.15,z=-1,x=.06)
+yesResetGame = Button(text='yes',y=0.02,x=-.25,scale=[.18,.08],color=color.red,text_color=color.white)
+yesResetGame.on_click = def():
+    song.pause()
+    clearInterval(background)
+    document.body.style.backgroundColor = 'black'
+    yesResetGame.enabled=False
+    noDontResetGame.enabled = False
+    after 3:
+        resetText.text = 'What have you done.'
+        resetText.xy = [.225,-.25]
+        after 2s:
+            SmoothTransit("TheEnd")
+
+noDontResetGame = Button(text='no',y=0.02,x=.35,scale=[.18,.08],color=color.black,text_color=color.white)
+noDontResetGame.on_click = def():
+    SmoothTransit('Settings')
+
+_hidden_fullscreen_button.xy = [213213213,123123123]
+</script>
+<script src="taptapir/sunsnake_compiler.js"></script>
+<script src="EarnClicks.js"></script></body>
+</html>

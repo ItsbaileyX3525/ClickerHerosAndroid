@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+    <script src="Smooth.js"></script>
+    <script>
+
+function PauseSounds() {
+    song.pause()
+}
+function ResumeSounds() {
+    song.play()
+}
+const maxPrestigeLevels = 10;
+
+function calculatePrestigeCost(level) {
+  return Math.pow(level, 3) * 1000000000000;
+}
+
+function calculatePrestiges(clicks, currentPrestiges) {
+  let prestiges = currentPrestiges;
+
+  if (prestiges >= maxPrestigeLevels) {
+    return 0;
+  }
+
+  let gainedPrestiges = 0;
+
+  while (clicks >= calculatePrestigeCost(prestiges + 1) && prestiges < maxPrestigeLevels) {
+    clicks -= calculatePrestigeCost(prestiges + 1);
+    prestiges++;
+    gainedPrestiges++;
+  }
+
+  return gainedPrestiges;
+}
+const shellyscream = new Audio('assets/sheldonscream.mp3')
+let gainedPrestiges = 0
+let currentPrestiges = localStorage.getItem("prestigelevel")
+let clicks = parseFloat(localStorage.getItem('score'))
+</script>
+    <script src="taptapir/taptapir.js"></script>
+<script src="taptapir-utility/slider.js"></script>
+<script type="text/sunsnake">
+
+#Global Functions
+set_orientation('horizontal')
+set_window_color('transparent')
+set_background_color('black')
+ASSETS_FOLDER = 'assets/'
+
+#TODO: Make cool prestige thing
+
+canPres = True
+resets = save_system_load('resets')
+metMorshu = save_system_load('metmorshu')
+startEarningGodlyClicks = int(save_system_load("earninggodlyclicks"))
+if not startEarningGodlyClicks:
+    startEarningGodlyClicks = 0
+donePrestigeSpeech = save_system_load('doneprestalk')
+allowedAttackSFX = save_system_load('attacksfx')
+volume = parseFloat(save_system_load('mastervolume'))
+clickerman = Entity(texture='Clicker-idle.gif',scale=.5)
+after 2.1s:
+    destroy(clickerman)
+    clickerman2 = Entity(texture='ClickerPrestige.gif',scale=.5)
+    after .9s:
+        shellyscream.play()
+        after 1s:
+            mendButton = Button(text='Prestige',scale=[.2,.1],y=-.4)
+            mendButton.on_click = def():
+                if canPres:
+                    gainedPrestiges = calculatePrestiges(clicks, currentPrestiges);
+                    currentPrestiges = currentPrestiges + gainedPrestiges;
+                    clickerman2.animate('alpha', 0, .25)
+                    mendButton.animate('y', 0, .5)
+                    mendButton.animate('scale_x', .4, .5)
+                    mendButton.animate('scale_y', .2, .5)
+                    mendButton.animate('text_size', 8, .5)
+                    after 1.5s:
+                        save_system_clear()
+                        save_system_save('resets',resets)
+                        save_system_save('prestigelevel', currentPrestiges)
+                        save_system_save('attacksfx', allowedAttackSFX)
+                        save_system_save('metmorshu', metMorshu)
+                        save_system_save('mastervolume', volume)
+                        save_system_save('earninggodlyclicks',startEarningGodlyClicks)
+                        save_system_save('doneprestalk',donePrestigeSpeech)
+                        SmoothTransit('Menu')
+
+
+
+
+
+_hidden_fullscreen_button.xy = [213213213,123123123]
+</script>
+<script src="taptapir/sunsnake_compiler.js"></script>
+</body>
+</html>

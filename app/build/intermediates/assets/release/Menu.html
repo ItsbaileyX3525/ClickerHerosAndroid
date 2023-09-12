@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<style>
+body{
+    background-color:black;
+}
+</style>
+
+<body>
+<div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+<script src="Smooth.js"></script>    
+    <script>
+let click = new Audio('assets/clickMenu.ogg');
+let click2 = new Audio('assets/clickGeneral.ogg');
+function requestAppClose() { //Close android app
+    try {
+        AndroidApp.closeApp();
+    } catch (ReferenceError) {
+        alert("Mobile only sowwy, cookie crisp in your bum-bum")
+    }
+}
+
+const getVersion = async () => {
+    let IsDated
+    await fetch('https://raw.githubusercontent.com/ItsbaileyX3525/Clicker-Heros/main/version.txt')
+    .then(response => response.text())
+    .then(text => {
+        const fetchedVersion = text.trim();
+        const predefinedVersion = '1.4';
+
+        if (predefinedVersion === fetchedVersion) {
+            ;
+        } else {
+        FYIText = new Text({name:'FYIText ', x:.1,y:-0.9,text : 'Newer version of the game is available.',text_color:color.green})
+        updateFYIText()
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching version file:', error);
+    })};
+function PauseSounds() {
+    //Pause all sounds
+}
+function ResumeSounds() {
+    //Resume all sounds
+}
+    </script>
+    <script src="taptapir/taptapir.js"></script>
+<script type="text/sunsnake">
+
+#Global Functions
+set_orientation('horizontal')
+set_window_color('black')
+set_background_color('black')
+ASSETS_FOLDER = 'assets/'
+
+def updateFYIText():
+    FYIText.animate('alpha', 0, 1)
+    after 1s:
+        FYIText.animate('alpha', 1, 1)
+        after 1s:
+            updateFYIText()
+
+#Menuscreen used for cool shit
+Title = Text(text='CLICKER HEROS!',xy=[.04,-0.025],text_color=color.red,text_size=8)
+startButton = Button(text='START GAME',y=.15,scale=[.5,.1],roundness=.5)
+settingsButton = Button(text='SETTINGS',y=0,scale=[.5,.1],roundness=.5)
+#startButton = Button(text='',y=.3,scale=[.5,.1],roundness=.5)
+creditsButton = Button(text='CREDITS',y=-.15,scale=[.5,.1],roundness=.5)
+exitButton = Button(text='EXIT',y=-.30,scale=[.5,.1],roundness=.5)
+getVersion();
+
+startButton.on_click = def():
+    click.play()
+    candoshit = False
+    SmoothTransit('main')
+    startButton.ignore_collision = True
+    settingsButton.ignore_collision = True
+
+settingsButton.on_click = def():
+    click2.play();
+    SmoothTransit("Settings")
+
+creditsButton.on_click = def():
+    click2.play()
+    SmoothTransit("Credits")
+
+exitButton.on_click = def():
+    requestAppClose()
+
+
+save_system_save('prevtab', "menu")
+save_system_save('currenttab', "menu")
+
+_hidden_fullscreen_button.xy = [213213213,123123123]
+
+</script>
+<script src="taptapir/sunsnake_compiler.js"></script>
+<script src="EarnClicks.js"></script></body>
+</html>

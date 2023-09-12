@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<style>
+body{
+    background-image:url('assets/bg.webp');
+}
+</style>
+<body>
+    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+    <script src="Smooth.js"></script>
+    <script>
+
+function random_int_(min, max) {//In taptapir but taptap is defined before goodness
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}  
+
+function Playwoosh() {
+   if (!allowedAttackSFX) {
+    ;
+   } else {
+    swoosh = random_int_(1,3);
+    if (swoosh === 1) {
+      woosh = new Audio('assets/woosh1.ogg')
+    } else if (swoosh === 2) {
+      woosh = new Audio('assets/woosh2.ogg')
+    } else {
+      woosh = new Audio('assets/woosh3.ogg')
+    }
+    woosh.volume = parseFloat(window.localStorage.getItem('mastervolume'))
+    woosh.play()
+
+    woosh.addEventListener('ended', function() {
+      woosh.remove();
+    })};
+}
+
+petergriffin = new Audio('assets/PeterMorshu.ogg')
+StartedSong = new Audio('assets/bgsong.ogg')
+StartedSong.play();
+StartedSong.loop = false;
+StartedSong.currentTime = 92
+StartedSong.addEventListener('ended', function() {
+this.currentTime = 0;
+this.src = 'assets/bgsong1.ogg';
+console.log(volume)
+SetVolumes(volume);
+this.play();
+}, false);
+
+function SetVolumes(volume) {
+    try {
+    StartedSong.volume = volume
+    } catch (TypeError) {
+        StartedSong.volume = 1
+        localStorage.setItem("mastervolume", 1) 
+    }
+}
+
+const savedImageData = localStorage.getItem('customBG');
+    if (savedImageData) {
+      document.body.style.backgroundImage = `url(${savedImageData})`;    }
+
+function formatNumber(number) {
+    const suffixes = ['', 'K', 'M', 'B', 'T', 'E', 'P', 'V', 'Dd', 'Qd', 'Sd', 'Td', 'Ud', 'Vd', 'Wd', 'Xd', 'Yd', 'Zd'];
+    
+    let magnitude = 0;
+    while (number >= 1000 && magnitude < suffixes.length - 1) {
+        number /= 1000;
+        magnitude++;
+    }
+    
+    const formattedNumber = number % 1 === 0 ? number.toFixed(0) : number.toFixed(2);
+    return formattedNumber + suffixes[magnitude];
+}
+function PauseSounds() {
+    StartedSong.pause()
+}
+function ResumeSounds() {
+    StartedSong.play()
+}
+function removeSpans(id='msgboxgodly '){
+    var list1 = document.getElementById(id);
+    var list = parenter.querySelector("entity")
+    while (list.hasChildNodes()) {
+        list.removeChild(list.firstChild);
+    }
+}
+function canPrestigeFunc(level) {
+    const cost = Math.pow(level+1, 3) * 1000000000000
+    if (score >= cost)
+    {return true;}
+    else
+    {return false}
+}
+
+    </script>
+
+    <script src="taptapir/taptapir.js"></script>   
+<script type="text/sunsnake">
+
+#Global Functions
+set_orientation('horizontal')
+set_window_color('transparent')
+set_background_color('black')
+ASSETS_FOLDER = 'assets/'
+
+#Global variables
+mainScene = []
+shopScene = []
+levelUps = []
+noInteract = False
+
+#For settings
+save_system_save('prevtab', "main")
+save_system_save('currenttab', "main")
+
+#Loading score and data etc.
+score = parseFloat(save_system_load('score'))
+if not score:
+    score = 0
+
+godlyClicks = int(save_system_load('godlyclicks'))
+if not godlyClicks or godlyClicks == null:
+    godlyClicks = 0
+
+prestigeLevel = int(save_system_load('prestigelevel'))
+if not prestigeLevel or prestigeLevel == null:
+    prestigeLevel = 0
+elif prestigeLevel >= 1:
+    after .2s:
+        globalMultiplier = 1 + prestigeLevel / 5
+        save_system_save('globalmultiplier', globalMultiplier)
+
+startEarningGodlyClicks = int(save_system_load("earninggodlyclicks"))
+if not startEarningGodlyClicks:
+    startEarningGodlyClicks = 0
+
+volume = parseFloat(save_system_load('mastervolume'))
+if volume < 0 or volume > 1 or volume == null or isNaN(volume):
+    volume = 1
+    save_system_save('mastervolume', volume)
+
+godlyClicksTracker = 50
+if not godlyClicksTracker or godlyClicksTracker == null:
+    godlyClicksTracker = 0
+
+Gen1Cost = int(save_system_load('gen1cost'))
+if not Gen1Cost or Gen1Cost == null:
+    Gen1Cost = 15
+Gen2Cost = int(save_system_load('gen2cost'))
+if not Gen2Cost or Gen2Cost == null:
+    Gen2Cost = 100
+Gen3Cost = int(save_system_load('gen3cost'))
+if not Gen3Cost or Gen3Cost == null:
+    Gen3Cost = 1100
+Gen4Cost = int(save_system_load('gen4cost'))
+if not Gen4Cost or Gen4Cost == null:
+    Gen4Cost = 12000
+Gen5Cost = int(save_system_load('gen5cost'))
+if not Gen5Cost or Gen5Cost == null:
+    Gen5Cost = 130000
+Gen6Cost = int(save_system_load('gen6cost'))
+if not Gen6Cost or Gen6Cost == null:
+    Gen6Cost = 1400000
+Gen7Cost = int(save_system_load('gen7cost'))
+if not Gen7Cost or Gen7Cost == null:
+    Gen7Cost = 20000000
+Gen1LevelUpCost = int(save_system_load('gen1upgradecost'))
+if not Gen1LevelUpCost or Gen1LevelUpCost == null:
+    Gen1LevelUpCost = 1
+Gen2LevelUpCost = int(save_system_load('gen2upgradecost'))
+if not Gen2LevelUpCost or Gen2LevelUpCost == null:
+    Gen2LevelUpCost = 1
+Gen3LevelUpCost = int(save_system_load('gen3upgradecost'))
+if not Gen3LevelUpCost or Gen3LevelUpCost == null:
+    Gen3LevelUpCost = 1
+Gen4LevelUpCost = int(save_system_load('gen4upgradecost'))
+if not Gen4LevelUpCost or Gen4LevelUpCost == null:
+    Gen4LevelUpCost = 1
+Gen5LevelUpCost = int(save_system_load('gen5upgradecost'))
+if not Gen5LevelUpCost or Gen5LevelUpCost == null:
+    Gen5LevelUpCost = 1
+Gen6LevelUpCost = int(save_system_load('gen6upgradecost'))
+if not Gen6LevelUpCost or Gen6LevelUpCost == null:
+    Gen6LevelUpCost = 1
+Gen7LevelUpCost = int(save_system_load('gen7upgradecost'))
+if not Gen7LevelUpCost or Gen7LevelUpCost == null:
+    Gen7LevelUpCost = 1
+
+unlockedGenLevels = save_system_load('unlockedgenlevels')
+if not unlockedGenLevels or unlockedGenLevels == null:
+    unlockedGenLevels = False
+
+friendMode = save_system_load("friendmodeactive")
+
+SetVolumes(volume);
+  
+allowedAttackSFX = save_system_load('attacksfx')
+if allowedAttackSFX == null:
+    allowedAttackSFX = True
+    save_system_save('attacksfx', allowedAttackSFX)
+
+#Main clicker game
+ClickerDude = Button(texture='Clicker-idle.gif',scale=[.3,.3],y=0)
+ClickerDude.on_click = def():
+    score += 1
+    Playwoosh()
+
+
+score_display = Text(text=`Clicks: ${score}`,xy=[0.22,-.025],text_size=5)
+score_display.update = def():
+    score_display.text = `Clicks: ${formatNumber(score)}`
+
+cpsDisplay = Text(text='CpS: 0',xy=[0.285,-.85],text_size=4)
+cpsDisplay.update = def():
+    try:
+        Gen1CPS = .1 * Gen1Owned * gen1Multiplier * globalMultiplier
+        Gen2CPS = 1 * Gen2Owned * gen2Multiplier * globalMultiplier
+        Gen3CPS = 8 * Gen3Owned * gen3Multiplier * globalMultiplier
+        Gen4CPS = 47 * Gen4Owned * gen4Multiplier * globalMultiplier
+        Gen5CPS = 260 * Gen5Owned * gen5Multiplier * globalMultiplier
+        Gen6CPS = 1400 * Gen6Owned * gen6Multiplier * globalMultiplier
+        Gen7CPS = 7800 * Gen7Owned * gen7Multiplier * globalMultiplier
+        collectiveCPS = Gen1CPS + Gen2CPS + Gen3CPS + Gen4CPS + Gen5CPS + Gen6CPS + Gen7CPS
+        cpsDisplay.text = `CpS: ${formatNumber(collectiveCPS)}`
+    catch (Error) {;}
+
+settingsButton = Button(texture='settingsCog.webp',scale=.1,x=.8,y=.45)
+settingsButton.on_click = def():
+    if not noInteract:
+        SmoothTransit("Settings")
+
+inShop = False
+ShopButton = Button(texture='shopCog.webp',x=.75,scale=.2,y=-.02)
+ShopButton.on_click = def():
+    if not noInteract:
+        metMorshu = save_system_load('metmorshu')
+        if not metMorshu:
+            save_system_save("metmorshu", 1)
+            morshu = Entity(scale=[2,1],z=-1,parent=camera.ui,texture='morshuCUM.gif')
+            petergriffin.play()
+            petergriffin.volume = volume
+            StartedSong.pause()
+            after 3:
+                destroy(morshu)
+                StartedSong.play()
+                StartedSong.loop = True
+        if not inShop:
+            inShop=True
+            for e in mainScene:
+                e.enabled=False
+            for e in shopScene:
+                e.enabled=True
+            if unlockedGenLevels:
+                for e in levelUps:
+                    e.enabled=True
+        else:
+            inShop = False
+            for e in mainScene:
+                e.enabled=True
+            for e in shopScene:
+                e.enabled=False
+            for e in levelUps:
+                e.enabled=False
+#Shop stuff & gens very annoying
+
+Gen1 = Button(cost=Gen1Cost,texture='clickerGen1.webp',enabled=False,x=-.8,y=.3)
+Gen1.on_click = def():
+    if score >= Gen1.cost:
+        score -= Gen1.cost
+        Gen1.cost = 15 * Math.pow(1.15,Gen1Owned+1)
+        Gen1.cost = round(Gen1.cost)
+        Gen1Owned += 1
+        Fcost = formatNumber(Gen1.cost);
+        Gen1Info.text = `Cost: ${Fcost}`
+        save_system_save("gen1owned", Gen1Owned)
+        save_system_save("gen1cost", Gen1.cost)
+
+Gen1LevelUp = Button(texture='GenUpgradeArrow.webp',scale=[.08,.08],xy=[-0.625,0.35],enabled=False,cost=1)
+Gen1LevelUp.on_click = def():
+    if godlyClicks >= Gen1LevelUp.cost:
+        gen1Multiplier += .1
+        godlyClicks -= Gen1LevelUp.cost
+        Gen1LevelUp.cost += 1
+        godlyClicksTracker += 1
+Gen1Info = Text(x=-.49,y=-.3,text=`Cost: ${formatNumber(Gen1Cost)}`,text_size=4.5,enabled=False)
+
+Gen2 = Button(cost=Gen2Cost,texture='clickerGen2.webp',enabled=False,x=-.8,y=-.01)
+Gen2.on_click = def():
+    if score >= Gen2.cost:
+        score -= Gen2.cost
+        Gen2.cost = 100 * Math.pow(1.15,Gen2Owned+1)
+        Gen2.cost = round(Gen2.cost)
+        Gen2Owned += 1
+        Fcost = formatNumber(Gen2.cost);
+        Gen2Info.text = `Cost: ${Fcost}`
+        save_system_save("gen2owned", Gen2Owned)
+        save_system_save("gen2cost", Gen2.cost)
+
+Gen2LevelUp = Button(texture='GenUpgradeArrow.webp',scale=[.08,.08],xy=[-0.625,0.06],enabled=False,cost=1)
+Gen2LevelUp.on_click = def():
+    if godlyClicks >= Gen2LevelUp.cost:
+        gen2Multiplier += .1
+        godlyClicks -= Gen2LevelUp.cost
+        Gen2LevelUp.cost += 1
+        godlyClicksTracker += 1
+Gen2Info = Text(x=-.49,y=-.6,text=`Cost: ${formatNumber(Gen2Cost)}`,text_size=4.5,enabled=False)
+
+Gen3 = Button(cost=Gen3Cost,texture='clickerGen3.webp',enabled=False,x=-.8,y=-.3)
+Gen3.on_click = def():
+    if score >= Gen3.cost:
+        score -= Gen3.cost
+        Gen3.cost = 1100 * Math.pow(1.15,Gen3Owned+1)
+        Gen3.cost = round(Gen3.cost)
+        Gen3Owned += 1
+        Fcost = formatNumber(Gen3.cost);
+        Gen3Info.text = `Cost: ${Fcost}`
+        save_system_save("gen3owned", Gen3Owned)
+        save_system_save("gen3cost", Gen3.cost)
+
+Gen3LevelUp = Button(texture='GenUpgradeArrow.webp',scale=[.08,.08],xy=[-0.625,-.23],enabled=False,cost=1)
+Gen3LevelUp.on_click = def():
+    if godlyClicks >= Gen3LevelUp.cost:
+        gen3Multiplier += .1
+        godlyClicks -= Gen3LevelUp.cost
+        Gen3LevelUp.cost += 1
+        godlyClicksTracker += 1
+Gen3Info = Text(x=-.49,y=-.9,text=`Cost: ${formatNumber(Gen3Cost)}`,text_size=4.5,enabled=False)
+
+Gen4 = Button(cost=Gen4Cost,texture='ClickerGen4.webp',enabled=False,x=-.3,y=.3)
+Gen4.on_click = def():
+    if score >= Gen4.cost:
+        score -= Gen4.cost
+        Gen4.cost = 12000 * Math.pow(1.15,Gen4Owned+1)
+        Gen4.cost = round(Gen4.cost)
+        Gen4Owned += 1
+        Fcost = formatNumber(Gen4.cost);
+        Gen4Info.text = `Cost: ${Fcost}`
+        save_system_save("gen4owned", Gen4Owned)
+        save_system_save("gen4cost", Gen4.cost)
+
+Gen4LevelUp = Button(texture='GenUpgradeArrow.webp',scale=[.08,.08],xy=[-0.1,0.35],enabled=False,cost=1)
+Gen4LevelUp.on_click = def():
+    if godlyClicks >= Gen4LevelUp.cost:
+        gen4Multiplier += .1
+        godlyClicks -= Gen4LevelUp.cost
+        Gen4LevelUp.cost += 1
+        godlyClicksTracker += 1
+Gen4Info = Text(x=-.05,y=-.3,text=`Cost: ${formatNumber(Gen4Cost)}`,text_size=4.5,enabled=False)
+
+Gen5 = Button(cost=Gen5Cost,texture='ClickerGen5.webp',enabled=False,x=-.3,y=-.01)
+Gen5.on_click = def():
+    if score >= Gen5.cost:
+        score -= Gen5.cost
+        Gen5.cost = 130000 * Math.pow(1.15,Gen5Owned+1)
+        Gen5.cost = round(Gen5.cost)
+        Gen5Owned += 1
+        Fcost = formatNumber(Gen5.cost);
+        Gen5Info.text = `Cost: ${Fcost}`
+        save_system_save("gen5owned", Gen5Owned)
+        save_system_save("gen5cost", Gen5.cost)
+
+Gen5LevelUp = Button(texture='GenUpgradeArrow.webp',scale=[.08,.08],xy=[-0.1,0.06],enabled=False,cost=1)
+Gen5LevelUp.on_click = def():
+    if godlyClicks >= Gen5LevelUp.cost:
+        gen5Multiplier += .1
+        godlyClicks -= Gen5LevelUp.cost
+        Gen5LevelUp.cost += 1
+        godlyClicksTracker += 1
+Gen5Info = Text(x=-.05,y=-.6,text=`Cost: ${formatNumber(Gen5Cost)}`,text_size=4.5,enabled=False)
+
+Gen6 = Button(cost=Gen6Cost,texture='ClickerGen6.webp',enabled=False,x=-.3,y=-.3)
+Gen6.on_click = def():
+    if score >= Gen6.cost:
+        score -= Gen6.cost
+        Gen6.cost = 1400000 * Math.pow(1.15,Gen6Owned+1)
+        Gen6.cost = round(Gen6.cost)
+        Gen6Owned += 1
+        Fcost = formatNumber(Gen6.cost);
+        Gen6Info.text = `Cost: ${Fcost}`
+        save_system_save("gen6owned", Gen6Owned)
+        save_system_save("gen6cost", Gen6.cost)
+
+Gen6LevelUp = Button(texture='GenUpgradeArrow.webp',scale=[.08,.08],xy=[-0.1,-.23],enabled=False,cost=1)
+Gen6LevelUp.on_click = def():
+    if godlyClicks >= Gen6LevelUp.cost:
+        gen6Multiplier += .1
+        godlyClicks -= Gen6LevelUp.cost
+        Gen6LevelUp.cost += 1  
+        godlyClicksTracker += 1 
+Gen6Info = Text(x=-.05,y=-.9,text=`Cost: ${formatNumber(Gen6Cost)}`,text_size=4.5,enabled=False)
+
+
+Gen7 = Button(cost=Gen7Cost,texture='ClickerGenFinal.webp',enabled=False,x=0.35,y=0,scale=.3)
+Gen7.on_click = def():
+    if score >= Gen7.cost:
+        score -= Gen7.cost
+        Gen7.cost = 20000000 * Math.pow(1.15,Gen7Owned+1)
+        Gen7.cost = round(Gen7.cost)
+        Gen7Owned += 1
+        Fcost = formatNumber(Gen7.cost);
+        Gen7Info.text = `Cost: ${Fcost}`
+        save_system_save("gen7owned", Gen7Owned)
+        save_system_save("gen7cost", Gen7.cost)
+
+Gen7LevelUp = Button(texture='GenUpgradeArrow.webp',scale=[.08,.08],xy=[.5,0.18],enabled=False,cost=1)
+Gen7LevelUp.on_click = def():
+    if godlyClicks >= Gen7LevelUp.cost:
+        gen7Multiplier += .1
+        godlyClicks -= Gen7LevelUp.cost
+        Gen7LevelUp.cost += 1
+        godlyClicksTracker += 1
+Gen7Info = Text(x=0.635,y=-.68,text=`Cost: ${formatNumber(Gen7Cost)}`,text_size=4.5,enabled=False)
+
+
+if friendMode == 'true' or friendMode == true:
+    Gen1.texture = 'CallumGen.webp'
+    Gen2.texture = 'NathanielGen.webp'
+    Gen3.texture = 'TaylorGen.webp'
+    Gen4.texture = 'WilsonGen.webp'
+    Gen5.texture = 'KarltonGen.webp'
+    Gen6.texture = 'RyanGen.webp'
+    Gen7.texture = 'EthanGen.webp'
+
+canPrestige = False
+prestigeStuffbg = Entity(parent=camera.ui,color=color.black,roundness=.1,xy=[-0.7,0.3],scale=[0.3,0.08],text_size=5)
+prestigeStuff = Button(color=color.clear,text='ascension',xy=[-0.7,0.3],scale=[0.3,0.08],text_size=5)
+prestigeStuff.update = def():
+    canPrestige = canPrestigeFunc(prestigeLevel)
+prestigeStuff.on_click = def():
+    if not noInteract:
+        DoYouReallyWantToAscend = Entity(parent=camera.ui,scale=[2,1],z=-1,color=hsv(0,0,.18))
+        InfoForAscend1 = Text(text='Are you sure you want to ascend?',text_color=color.white,text_size=6,x=-.1,y=-.04)
+        InfoForAscend2 = Text(text='By ascending you will lose all progress in\nexchange for a multiplier.',text_color=color.white,text_size=4.5,x=-.08,y=-.15)
+        if canPrestige:
+            InfoForAscend3 = Text(text=`Your current multiplier is ${formatNumber(globalMultiplier)}.`,text_color=color.white,text_size=4,x=.15,y=-.4)
+        else:
+            InfoForAscend3 = Text(text=`Your current multiplier is ${formatNumber(globalMultiplier)}\n*Prestiging now will grant\nyou no bonus.*`,text_color=color.white,text_size=4,x=.15,y=-.4)
+        YesIReallyWantToAscend = Button(text="Ascend",z=-1,scale=[.3,.125],y=-.15)
+        NoIReallyDontWantToAscend = Button(text="Cancel",z=-1,color,scale=[.17,.08],x=.5,y=-.4)
+        YesIReallyWantToAscend.on_click = def():
+            SmoothTransit("Prestige")
+        NoIReallyDontWantToAscend.on_click = def():
+            destroy(DoYouReallyWantToAscend)
+            destroy(InfoForAscend1)
+            destroy(InfoForAscend2)
+            destroy(InfoForAscend3)
+            destroy(YesIReallyWantToAscend)
+            destroy(NoIReallyDontWantToAscend)
+
+#Appending shop items
+shopScene.append(Gen1)
+shopScene.append(Gen1Info)
+shopScene.append(Gen2)
+shopScene.append(Gen2Info)
+shopScene.append(Gen3)
+shopScene.append(Gen3Info)
+shopScene.append(Gen4)
+shopScene.append(Gen4Info)
+shopScene.append(Gen5)
+shopScene.append(Gen5Info)
+shopScene.append(Gen6)
+shopScene.append(Gen6Info)
+shopScene.append(Gen7)
+shopScene.append(Gen7Info)
+levelUps.append(Gen1LevelUp)
+levelUps.append(Gen2LevelUp)
+levelUps.append(Gen3LevelUp)
+levelUps.append(Gen4LevelUp)
+levelUps.append(Gen5LevelUp)
+levelUps.append(Gen6LevelUp)
+levelUps.append(Gen7LevelUp)
+
+#Appending main items
+mainScene.append(ClickerDude)
+mainScene.append(settingsButton)
+mainScene.append(cpsDisplay)
+mainScene.append(prestigeStuff)
+mainScene.append(prestigeStuffbg)
+
+
+
+def update():
+    try:
+        save_system_save('gen1multiplier', gen1Multiplier)
+        save_system_save('gen2multiplier', gen2Multiplier)
+        save_system_save('gen3multiplier', gen3Multiplier)
+        save_system_save('gen4multiplier', gen4Multiplier)
+        save_system_save('gen5multiplier', gen5Multiplier)
+        save_system_save('gen6multiplier', gen6Multiplier)
+        save_system_save('gen7multiplier', gen7Multiplier)
+        save_system_save('gen1upgradecost', Gen1LevelUp.cost)
+        save_system_save('gen2upgradecost', Gen2LevelUp.cost)
+        save_system_save('gen3upgradecost', Gen3LevelUp.cost)
+        save_system_save('gen4upgradecost', Gen4LevelUp.cost)
+        save_system_save('gen5upgradecost', Gen5LevelUp.cost)
+        save_system_save('gen6upgradecost', Gen6LevelUp.cost)
+        save_system_save('gen7upgradecost', Gen7LevelUp.cost)
+        save_system_save('godlyclicks', godlyClicks)
+        save_system_save('godlyclickstracker', godlyClicksTracker)
+        save_system_save('prestigelevel', prestigeLevel)
+    catch (err) {;}
+    for e in levelUps:
+        if godlyClicks >= e.cost
+            e.texture = 'GenUpgradeArrow.webp'
+        else:
+            e.texture = 'GenUpgradeArrowU.webp'
+    if score >= 100000000:
+        after .5s:
+            if not startEarningGodlyClicks:
+                if inShop:
+                    inShop = False
+                    for e in mainScene:
+                        e.enabled=True
+                    for e in shopScene:
+                        e.enabled=False
+                    for e in levelUps:
+                        e.enabled=False
+                cpsDisplay.enabled=False
+                msgboxgodly.enabled=True
+                after 1:
+                    msgboxArrow.enabled=True
+                var textLines = [
+                { speed: speeds.normal, string: "\nYo!" },
+                { speed: speeds.pause, string: "", pause: true },
+                { speed: speeds.fast, string: "You've reached 100M clicks!" },
+                { speed: speeds.pause, string: "", pause: true },
+                { speed: speeds.fast, string: "Congrats by the way.\nThis" },
+                { speed: speeds.fast, string: "means you can now" },
+                { speed: speeds.fast, string: "start earning godly clicks" },
+                ];
+                noInteract=True
+                startEarningGodlyClicks = 1
+                save_system_save("earninggodlyclicks", 1)
+                revealOneCharacter(characters)
+
+msgboxgodly = Entity(roundness=.05,color=color.white,enabled=False,scale=[1.7,.3],y=-.3,z=-1)
+msgboxArrow = Entity(texture='arrow.gif',enabled=False,scale=[.15,.2],xy=[0.75,-0.4],z=-3)
+
+onCurrent=1
+msgboxgodly.on_click = def():
+    if onCurrent == 1:
+        parenter = document.getElementById("msgboxgodly ");
+        container = parenter.querySelector("entity")
+        removeSpans()
+        textLines = [
+        { speed: speeds.fast, string: "\nGodly clicks can be used to upgrade your generators." },
+        { speed: speeds.pause, string: "", pause: true },
+        { speed: speeds.fast, string: "\nThis makes them generate clicks a lot faster!" },
+        
+        ];
+        createText()
+        revealOneCharacter(characters)
+        onCurrent += 1
+    elif onCurrent == 2:
+        removeSpans()
+        textLines = [
+        { speed: speeds.fast, string: "\nI have given you 1 godly click for free that you can\nuse in the shop to upgrade any gen of your choice." },        
+        ];
+        createText()
+        revealOneCharacter(characters)
+        onCurrent +=1
+        if godlyClicks >= 0:
+            godlyClicks = 1
+    elif onCurrent == 3:
+        removeSpans()
+        textLines = [
+        { speed: speeds.fast, string: '\nGodly clicks can be collected every 5 minutes of\nplaytime and can grant 1-2 godly clicks per harvest.' },        
+        ];
+        createText()
+        revealOneCharacter(characters)
+        onCurrent +=1
+    elif onCurrent == 4:
+        destroy(msgboxgodly)
+        msgboxArrow.enabled=False
+        cpsDisplay.enabled=True
+        noInteract = False
+        onCurrent = 1
+        unlockedGenLevels = True
+        save_system_save('unlockedgenlevels', 1)
+
+donePrestigeSpeech = save_system_load('doneprestalk')
+
+msgboxprestige = Entity(roundness=.05,color=color.white,enabled=False,scale=[1.7,.3],y=-.3,z=-1)
+msgboxprestige.on_click = def():
+    if onCurrent == 1:
+        removeSpans(id='msgboxprestige ')
+        textLines = [
+        { speed: speeds.fast, string: "\nYour global multiplier affects all your generators\nthat you own." },
+        
+        ];
+        createText()
+        revealOneCharacter(characters)
+        onCurrent += 1
+    elif onCurrent == 2:
+        removeSpans(id='msgboxprestige ')
+        textLines = [
+        { speed: speeds.fast, string: "\nEach ascension level you earn will increase\nyour multipler by 0.2 up to 3x." },        
+        ];
+        createText()
+        revealOneCharacter(characters)
+        onCurrent +=1
+        if godlyClicks >= 0:
+            godlyClicks = 1
+    elif onCurrent == 3:
+        destroy(msgboxprestige)
+        msgboxArrow.enabled=False
+        noInteract = False
+        onCurrent = 1
+        save_system_save('doneprestalk', 1)
+
+after .2s:
+    if prestigeLevel >= 1 and not donePrestigeSpeech:
+        if inShop:
+        inShop = False
+        for e in mainScene:
+            e.enabled=True
+        for e in shopScene:
+            e.enabled=False
+        for e in levelUps:
+            e.enabled=False
+        cpsDisplay.enabled=False
+        noInteract = True
+        msgboxprestige.enabled=True
+        after 1:
+            msgboxArrow.enabled=True
+        removeSpans()
+        parenter = document.getElementById("msgboxprestige ");
+        container = parenter.querySelector("entity")
+        textLines = [
+        { speed: speeds.fast, string: "\nNice, you did your first ascension!" },
+        { speed: speeds.pause, string: "", pause: true },
+        { speed: speeds.fast, string: "\nYou've unlocked the global mutliplier." },
+        
+        ];
+        createText()
+        revealOneCharacter(characters)
+    
+_hidden_fullscreen_button.xy = [213213213,123123123]
+</script>
+<script src="taptapir/sunsnake_compiler.js"></script>
+<script>
+
+var shadowBox = document.getElementById("prestigeStuff ");
+var rainbowText = shadowBox.querySelector("entity")
+
+rainbowText.style.fontSize = "20px";
+rainbowText.style.fontFamily = "monospace";
+rainbowText.style.letterSpacing = "0px";
+rainbowText.style.background = "linear-gradient(to right, #6666ff, #0099ff , #00ff00, #202a44, #6666ff)";
+rainbowText.style.WebkitBackgroundClip = "text";
+rainbowText.style.backgroundClip = "text";
+rainbowText.style.color = "transparent";
+rainbowText.style.animation = "rainbow_animation 6s ease-in-out infinite";
+rainbowText.style.backgroundSize = "400% 100%";
+
+const keyframes = `
+    0%, 100% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 100% 0;
+    }
+`;
+
+const styleSheet = document.styleSheets[0];
+styleSheet.insertRule(`@keyframes rainbow_animation { ${keyframes} }`, styleSheet.cssRules.length);
+
+
+
+var parenter = document.getElementById("msgboxgodly ");
+var container = parenter.querySelector("entity")
+var speeds = {
+   pause: 500, //Higher number = longer delay
+   slow: 120,
+   normal: 90,
+   fast: 40,
+   superFast: 10
+};
+
+
+var textLines = [
+   { speed: speeds.normal, string: "\nYo!" },
+   { speed: speeds.pause, string: "", pause: true },
+   { speed: speeds.fast, string: "You've reached 100M clicks!" },
+   { speed: speeds.pause, string: "", pause: true },
+   { speed: speeds.fast, string: "Congrats by the way.\nThis" },
+   { speed: speeds.fast, string: "means you can now" },
+   { speed: speeds.fast, string: "start earning godly clicks" },
+];
+var characters = [];
+function createText() {
+if (characters != []){characters = []}
+textLines.forEach((line, index) => {
+   if (index < textLines.length - 1) {
+      line.string += " "; //Add a space between lines
+   }
+
+   line.string.split("").forEach((character) => {
+      var span = document.createElement("span");
+      span.style.zIndex = 10
+      span.style.opacity = 0
+      span.style.fontSize = "x-large"
+      span.textContent = character;
+      container.appendChild(span);
+      characters.push({
+         span: span,
+         isSpace: character === " " && !line.pause,
+         delayAfter: line.speed,
+         classes: line.classes || []
+      });
+   });
+});}
+createText();
+function revealOneCharacter(list) {
+   var next = list.splice(0, 1)[0];
+   next.span.classList.add("revealed");
+   next.span.style.opacity = 1
+   next.classes.forEach((c) => {
+      next.span.classList.add(c);
+      
+   });
+   var delay = next.isSpace && !next.pause ? 0 : next.delayAfter;
+
+   if (list.length > 0) {
+      setTimeout(function () {
+         revealOneCharacter(list);
+      }, delay);
+   }
+}    
+function randomRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+const maxRangeX = .8
+const minRangeX = -.8
+const maxRangeY = .3
+const minRangeY = -.3
+let bubbleExists = false
+function earnGodly() {
+    if (!bubbleExists){
+    bubbleExists=true
+    const choices = random_int_(0,1)
+    const randomY = Math.random() * (maxRangeY - minRangeY) + minRangeY;
+    const randomX = Math.random() * (maxRangeX - minRangeX) + minRangeX;
+
+    if (choices === 0) {
+    godlyClicksEarnBubble = new Button({name:'godlyClicksEarnBubble ', texture:'GodlyClick.webp',xy:[randomX,randomY]})
+    godlyClicksEarnBubble.on_click = function() {
+        godlyClicks += 1
+        bubbleExists=false
+        destroy(godlyClicksEarnBubble)
+    }}
+    else if (choices === 1) {
+    godlyClicksEarnBubble2 = new Button({name:'godlyClicksEarnBubble2 ', texture:'GodlyClick.webp',xy:[randomX,randomY]})
+    godlyClicksEarnBubble2.on_click = function() {
+        godlyClicks += 2
+        bubbleExists=false
+        destroy(godlyClicksEarnBubble2)
+    }}}
+}
+
+const interval = setInterval(earnGodly, 5 * 60 * 1000);
+
+function stopInterval() {
+  clearInterval(interval);
+  console.log("Interval stopped after " + numberOfRepetitions + " repetitions.");
+}
+
+</script>
+<script src="EarnClicks.js"></script><script src="AchievementHandler.js"></script>
+</body>
+</html>

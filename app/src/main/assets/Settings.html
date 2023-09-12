@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<style>
+body{
+    background-image:url('assets/Settingsbg.webp');
+}
+</style>
+<body>
+    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+    <script src="Smooth.js"></script>
+    
+    <script>
+
+
+music = new Audio('assets/settingsbgsong.ogg')
+
+music.play();
+music.loop = true;
+
+function setVolumeForAudioArray(volumee) {
+    var vol = volumee/100
+    music.volume = parseFloat(vol);
+}
+
+const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.borderRadius = '10px';
+    fileInput.style.opacity = 0;
+    
+    const uploadedImage = document.createElement('img');
+    uploadedImage.style.maxWidth = '100%';
+    uploadedImage.style.opacity = 0;
+    
+    fileInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        if (file.size <= 2 * 1024 * 1024) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            const imageData = e.target.result;
+            localStorage.setItem('customBG', imageData);
+            uploadedImage.src = imageData;
+          };
+          
+          reader.readAsDataURL(file);
+        } else {
+          fileInput.value = ''; // Clear the file input
+        }
+      }
+    });
+
+
+    // Function to fetch JSON data asynchronously
+    async function fetchJSONData(url) {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+    
+    async function GetCodes(Input) {
+      try {
+        let friends = localStorage.getItem("friendmodeactive")
+        if (friends === null || friends === "false") {friends=false}
+        const jsonData = await fetchJSONData('https://raw.githubusercontent.com/ItsbaileyX3525/Clicker-Heros/main/ActiveCodes.json');
+        if (localStorage.getItem(Input)) {
+            FYIText = new Text({name:'FYIText ', x:.2,y:-0.6,text : `Code already used!`,text_color:color.red});
+            FYIText.animate('alpha', 0, 2);
+            return;
+        }
+        if (Input === 'FriendMode' && !friends) {
+            FYIText = new Text({name:'FYIText ', x:.2,y:-0.6,text : `Friend mode active!`,text_color:color.green});
+            FYIText.animate('alpha', 0, 2);
+            friendModeActive = new Checkbox({name:'friendModeActive ', x:-.3,y:-.2,state:True})
+            friendModeActiveInfo = new Text({name:'friendModeActiveInfo ', text:'Friend mode: ',x:-0.15,y:-.68})
+            localStorage.setItem("friendmodeactive", "true");
+            return;
+          } else if (Input === 'DebuggerMode') {
+            WARNINGBEWARECALLUMISWEARMANBEWARE = new Entity({name:'WARNINGBEWARECALLUMISWEARMANBEWARE ', parent:camera.ui,color:color.gray,scale:[2,1],z:-2})
+            WARNINGBEWARECALLUMISWEARMANBEWARE1 = new Text({name:'WARNINGBEWARECALLUMISWEARMANBEWARE1 ', text_size:5,text:'Are you sure you wanna enable the debug console?',x:-.25,y:-.2,z:-2})
+            WARNINGBEWARECALLUMISWEARMANBEWARE2 = new Button({name:'WARNINGBEWARECALLUMISWEARMANBEWARE2 ', text:'YES',scale:.2,x:.5,z:-2,color:color.red})
+            WARNINGBEWARECALLUMISWEARMANBEWARE3 = new Button({name:'WARNINGBEWARECALLUMISWEARMANBEWARE3 ', text:'NO',scale:.2,x:-.5,z:-2,color:color.green})
+            WARNINGBEWARECALLUMISWEARMANBEWARE2.on_click = function() {
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE);
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE1);
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE2);
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE3);
+              DebugConsole = new InputField({name:'DebugConsole ', x:.4,y:.15,scale:[.4,.06],roundness:.1})
+              DebugConsoleSubmit = new Button({name:'DebugConsoleSubmit ', text:'Submit',scale:[.12,.06],x:.7,y:.145})
+              DebugConsoleSubmit.on_click = function() {
+                eval(DebugConsole.value)
+              }
+            }
+            WARNINGBEWARECALLUMISWEARMANBEWARE3.on_click = function() {
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE);
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE1);
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE2);
+              destroy(WARNINGBEWARECALLUMISWEARMANBEWARE3);
+            }
+            return;
+          }
+        if (Input in jsonData) {
+          for (const key in jsonData) {
+            if (key === Input) {
+              let currentScore = parseInt(localStorage.getItem("score"))
+              currentScore = currentScore + parseInt(jsonData[key]);
+              score = currentScore;
+              localStorage.setItem("score", currentScore);
+              localStorage.setItem(Input, jsonData[key]);
+              FYIText = new Text({name:'FYIText ', x:.2,y:-0.6,text : `Code redeemed!`,text_color:color.green});
+              FYIText.animate('alpha', 0, 2);
+              break;
+            } else {
+              continue;
+            }
+          }}
+          else {
+            FYIText = new Text({name:'FYIText ', x:.2,y:-0.6,text : `Code doesn't exist or expired!`,text_color:color.red});
+            FYIText.animate('alpha', 0, 2);
+          }
+      } catch (error) {
+        FYIText = new Text({name:'FYIText ', x:.2,y:-0.6,text : `Failed to fetch codes ${error}, check Wi-Fi`,text_color:color.red});
+        FYIText.animate('alpha', 0, 2);
+      }after(2, function(){destroy(FYIText)})
+    }
+    
+function PauseSounds() {
+    music.pause();
+}
+function ResumeSounds() {
+    music.play();
+}
+</script>
+    <script src="taptapir/taptapir.js"></script>
+<script src="taptapir-utility/slider.js"></script>
+<script type="text/sunsnake">
+
+#Global Functions
+set_orientation('horizontal')
+set_window_color('transparent')
+set_background_color('black')
+ASSETS_FOLDER = 'assets/'
+
+volume = round(parseFloat(save_system_load('mastervolume')), 10)
+if volume < 0 or volume > 1 or volume == null or isNaN(volume):
+    volume = 1
+volume = volume * 100
+print(volume)
+PrevTab = save_system_load('prevtab')
+save_system_save('currenttab', "settings")
+allowedAttackSFX = save_system_load('attacksfx')
+GoBackButton = Button(texture='LeftArrow.webp',y=.425,x=-.8,scale=[.1,.1])
+GoBackButton.on_click = def():
+    if PrevTab == 'menu':
+        SmoothTransit('Menu')
+    elif PrevTab == 'main':
+        SmoothTransit('main')
+
+attackSFX = Checkbox(state=allowedAttackSFX,y=.17,x=-.22)
+attackSFXText = Text(text='Click sounds: ',y=-.31,x=-.07)
+
+
+masterVolume = new Slider({y:.315,scale:[0.4,0.03],background_color:rgb(57, 66, 92)})
+
+masterVolumeVolume = Text(text='',x=.365,y=-.1)
+masterVolumeVolume.update = def():
+    masterVolumeVolume.text = masterVolume.value
+
+masterVolumeText = Text(text='Master volume: ',x=-.07,y=-.1625)
+masterVolume.setValue(volume)
+
+TwitterCodesText = Text(text='Code: ',y=-.482,x=-.068)
+TwitterCodes = InputField(x=-0.16,scale=[.4,.04],roundness=.1)
+TwitterCodesSubmit = Button(text='Submit',scale=[.12,.06],x=.125,y=-.004)
+TwitterCodesSubmit.on_click = def():
+    GetCodes(TwitterCodes.value)
+
+
+#Custom background
+
+sowwyppls = []
+CustomBackground = Button(enabled=True,scale_y=.1,y=-0.4,x=-0.5,text='Change background')
+#CustomBackground.el.appendChild(fileInput)
+CustomBackground.fit_to_text()
+CustomBackground.on_click = def():
+    Sowwyppl = Text(text='Not supported yet',y=-0.6,x=.275,text_color=color.red)
+    sowwyppls.append(Sowwyppl)
+    after 2:
+        for e in sowwyppls:
+            destroy(e)
+
+Credits = Button(text='Credits',y=-.4,x=.5,scale=[.2,.1],color=color.gray,text_color=color.white)
+Credits.on_click = def():
+    SmoothTransit('Credits')
+
+friendmode = save_system_load("friendmodeactive")
+if friendmode != null and friendmode != false:
+    friendModeActive = Checkbox(x=-.3,y=-.2,state=True)
+    friendModeActiveInfo = Text(text='Friend mode: ',x=-0.15,y=-.68)
+
+#Because Rangers thing sucks
+entityUpdater = Entity(alpha=0)
+entityUpdater.update = def():
+    save_system_save("mastervolume", masterVolume.value/100)
+    save_system_save("attacksfx", attackSFX.value)
+    try{
+    save_system_save("friendmodeactive", friendModeActive.value)
+    }catch{;}
+    setVolumeForAudioArray(masterVolume.value);
+    
+
+#Reset game stuff (very dangerous all progress lost)
+resetGame = Button(y=-.4,text='RESET',scale=[.2,.1],color=color.red)
+resetGame.on_click = def():
+    SmoothTransit('Reset')
+    
+
+
+
+
+_hidden_fullscreen_button.xy = [213213213,123123123]
+</script>
+<script src="taptapir/sunsnake_compiler.js"></script>
+<script src="EarnClicks.js"></script></body>
+</html>
