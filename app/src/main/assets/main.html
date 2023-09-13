@@ -142,7 +142,7 @@ if volume < 0 or volume > 1 or volume == null or isNaN(volume):
     volume = 1
     save_system_save('mastervolume', volume)
 
-godlyClicksTracker = 50
+godlyClicksTracker = int(save_system_load("godlyclickstracker"))
 if not godlyClicksTracker or godlyClicksTracker == null:
     godlyClicksTracker = 0
 
@@ -195,6 +195,10 @@ if not unlockedGenLevels or unlockedGenLevels == null:
 
 friendMode = save_system_load("friendmodeactive")
 
+clickMultiplier = parseFloat(save_system_load('clickmultiplier'))
+if not clickMultiplier:
+    clickMultiplier = 1
+
 SetVolumes(volume);
   
 allowedAttackSFX = save_system_load('attacksfx')
@@ -202,10 +206,13 @@ if allowedAttackSFX == null:
     allowedAttackSFX = True
     save_system_save('attacksfx', allowedAttackSFX)
 
+#TODO: Create proper click multipler because i didnt have time to do it in the lunch break :(
+
 #Main clicker game
 ClickerDude = Button(texture='Clicker-idle.gif',scale=[.3,.3],y=0)
 ClickerDude.on_click = def():
-    score += 1
+    collectiveClick = Gen1Earn/5 * Gen1Owned + Gen2Earn/5 * Gen2Owned + Gen3Earn/5 * Gen3Owned + Gen4Earn/5 * Gen4Owned + Gen5Earn/5 * Gen5Owned + Gen6Earn/5 * Gen6Owned + Gen7Earn/5 * Gen7Owned
+    score += 1 + collectiveClick * clickMultiplier * globalMultiplier 
     Playwoosh()
 
 
@@ -423,6 +430,7 @@ if friendMode == 'true' or friendMode == true:
     Gen5.texture = 'KarltonGen.webp'
     Gen6.texture = 'RyanGen.webp'
     Gen7.texture = 'EthanGen.webp'
+    ClickerDude.texture='LeonGen.webp'
 
 canPrestige = False
 prestigeStuffbg = Entity(parent=camera.ui,color=color.black,roundness=.1,xy=[-0.7,0.3],scale=[0.3,0.08],text_size=5)

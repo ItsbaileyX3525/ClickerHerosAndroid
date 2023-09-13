@@ -34,22 +34,29 @@ for (const variable of vars2) {
         window[variable] = 1;
     }
 }
+let Gen1Earn = 0.1
+let Gen2Earn = 1
+let Gen3Earn = 8
+let Gen4Earn = 47
+let Gen5Earn = 260
+let Gen6Earn = 1400
+let Gen7Earn = 7800
 function applyScore() {
     try {
     if (Gen1Owned > 0){
-    score = Math.round((score + 0.1 * Gen1Owned * gen1Multiplier * globalMultiplier) * 10) / 10;}
+    score = Math.round((score + Gen1Earn * Gen1Owned * gen1Multiplier * globalMultiplier) * 10) / 10;}
     if (Gen2Owned > 0){
-        score += 1 * Gen2Owned * gen2Multiplier * globalMultiplier;}
+        score += Gen2Earn * Gen2Owned * gen2Multiplier * globalMultiplier;}
     if (Gen3Owned > 0 * gen2Multiplier * globalMultiplier){
-        score += 8 * Gen3Owned * gen3Multiplier * globalMultiplier;}
+        score += Gen3Earn * Gen3Owned * gen3Multiplier * globalMultiplier;}
     if (Gen4Owned > 0){
-      score += 47 * Gen4Owned * gen4Multiplier * globalMultiplier;}
+      score += Gen4Earn * Gen4Owned * gen4Multiplier * globalMultiplier;}
     if (Gen5Owned > 0){
-        score += 260 * Gen5Owned * gen6Multiplier * globalMultiplier;}
+        score += Gen5Earn * Gen5Owned * gen6Multiplier * globalMultiplier;}
     if (Gen6Owned > 0){
-        score += 1400 * Gen6Owned * gen6Multiplier * globalMultiplier;}
+        score += Gen6Earn * Gen6Owned * gen6Multiplier * globalMultiplier;}
     if (Gen7Owned > 0){
-        score += 7800 * Gen7Owned * gen7Multiplier * globalMultiplier;}
+        score += Gen7Earn * Gen7Owned * gen7Multiplier * globalMultiplier;}
     save_system_save("score", score);
         after(1, function() {
         applyScore();
