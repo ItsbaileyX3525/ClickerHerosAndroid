@@ -6,10 +6,10 @@ body{
 }
 </style>
 <body>
-<div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
-<script src="Smooth.js"></script>
-
-<script>
+    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+    <script src="Smooth.js"></script>
+    
+    <script>
 
 
 music = new Audio('assets/settingsbgsong.ogg')
@@ -27,23 +27,23 @@ const fileInput = document.createElement('input');
     fileInput.accept = 'image/*';
     fileInput.style.borderRadius = '10px';
     fileInput.style.opacity = 0;
-
+    
     const uploadedImage = document.createElement('img');
     uploadedImage.style.maxWidth = '100%';
     uploadedImage.style.opacity = 0;
-
+    
     fileInput.addEventListener('change', function(event) {
       const file = event.target.files[0];
       if (file) {
         if (file.size <= 2 * 1024 * 1024) {
           const reader = new FileReader();
-
+          
           reader.onload = function(e) {
             const imageData = e.target.result;
             localStorage.setItem('customBG', imageData);
             uploadedImage.src = imageData;
           };
-
+          
           reader.readAsDataURL(file);
         } else {
           fileInput.value = ''; // Clear the file input
@@ -58,7 +58,7 @@ const fileInput = document.createElement('input');
       const data = await response.json();
       return data;
     }
-
+    
     async function GetCodes(Input) {
       try {
         let friends = localStorage.getItem("friendmodeactive")
@@ -124,7 +124,7 @@ const fileInput = document.createElement('input');
         FYIText.animate('alpha', 0, 2);
       }after(2, function(){destroy(FYIText)})
     }
-
+    
 function PauseSounds() {
     music.pause();
 }
@@ -133,11 +133,7 @@ function ResumeSounds() {
 }
 function readData(data){
     const musicPlayer = document.getElementById("musicPlayer");
-    egggg = new Text({text:data})
     localStorage.setItem('audioFile', data);
-    egg= new Audio(data)
-    egg.play()
-    music.pause()
 const existingInput = document.getElementById('musicFile');
 if (existingInput) {
   existingInput.parentNode.removeChild(existingInput);
@@ -151,7 +147,7 @@ newInput.style.opacity = 0;
 e.el.appendChild(newInput)  }
 
 </script>
-<script src="taptapir/taptapir.js"></script>
+    <script src="taptapir/taptapir.js"></script>
 <script src="taptapir-utility/slider.js"></script>
 <script type="text/sunsnake">
 

@@ -54,6 +54,10 @@ set_window_color('black')
 set_background_color('black')
 ASSETS_FOLDER = 'assets/'
 
+firstTimePlayed = save_system_load('firsttimeplayed')
+if firstTimePlayed == null:
+    firstTimePlayed = 0
+
 def updateFYIText():
     FYIText.animate('alpha', 0, 1)
     after 1s:
@@ -63,11 +67,15 @@ def updateFYIText():
 
 #Menuscreen used for cool shit
 Title = Text(text='CLICKER HEROS!',xy=[.04,-0.025],text_color=color.red,text_size=8)
-startButton = Button(text='START GAME',y=.15,scale=[.5,.1],roundness=.5)
-settingsButton = Button(text='SETTINGS',y=0,scale=[.5,.1],roundness=.5)
-#startButton = Button(text='',y=.3,scale=[.5,.1],roundness=.5)
-creditsButton = Button(text='CREDITS',y=-.15,scale=[.5,.1],roundness=.5)
-exitButton = Button(text='EXIT',y=-.30,scale=[.5,.1],roundness=.5)
+if not firstTimePlayed:
+    startButton = Button(text='START GAME',y=0,scale=[.5,.1],roundness=.5)
+else:
+    startButton = Button(text='START GAME',y=.15,scale=[.5,.1],roundness=.5)
+    settingsButton = Button(text='SETTINGS',y=0,scale=[.5,.1],roundness=.5)
+    creditsButton = Button(text='CREDITS',y=-.15,scale=[.5,.1],roundness=.5)
+    exitButton = Button(text='EXIT',y=-.30,scale=[.5,.1],roundness=.5)
+
+save_system_save('firsttimeplayed',1)
 getVersion();
 
 startButton.on_click = def():

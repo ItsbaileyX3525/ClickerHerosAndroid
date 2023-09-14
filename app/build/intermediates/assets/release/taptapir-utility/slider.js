@@ -12,7 +12,7 @@ class Slider extends Entity{
         this.alpha = 0;
         this.sliderBackground = new Entity({scale: [settings.scale[0] + settings.scale[1], settings.scale[1]],x: settings.x,y: settings.y,roundness: 0.5,color: settings.background_color});
         this.sliderVal = new Entity({scale: [settings.scale[0], 0],x: settings.x,y: settings.y});
-        this.sliderButton = new Button({scale: [settings.scale[1]*1.5, settings.scale[1]*1.5],x: settings.x,y: settings.y+0.0005,roundness: 0.5,color: settings.button_color,draggable: true,lock_y: true});
+        this.sliderButton = new Button({scale: [settings.scale[1]*1.6, settings.scale[1]*1.5],x: settings.x,y: settings.y+0.0005,roundness: 0.5,color: settings.button_color,draggable: true,lock_y: true});
         this.value = settings.value;
         
         this.sliderButton.x = (this.sliderButton.x = this.value * this.sliderVal.scale_x / 100 - this.sliderVal.scale_x / 2);

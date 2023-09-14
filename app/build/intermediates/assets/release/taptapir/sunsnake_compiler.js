@@ -1,5 +1,5 @@
 print = console.log
-_class_names = ['Entity' ,'Button', 'Text','Checkbox', 'Audio', 'HealthBar', 'RainbowSlider', 'InputField']
+_class_names = ['Entity' ,'Button', 'Text','Checkbox', 'HealthBar', 'RainbowSlider', 'InputField']
 _language = 'sunsnake'
 
 Array.prototype.at = function(i) {

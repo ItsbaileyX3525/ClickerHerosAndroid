@@ -6,15 +6,15 @@ body{
 }
 </style>
 <body>
-<div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
-<script src="Smooth.js"></script>
-<script>
+    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+    <script src="Smooth.js"></script>
+    <script>
 
 function random_int_(min, max) {//In taptapir but taptap is defined before goodness
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+}  
 
 function Playwoosh() {
    if (!allowedAttackSFX) {
@@ -40,7 +40,6 @@ petergriffin = new Audio('assets/PeterMorshu.ogg')
 StartedSong = new Audio('assets/bgsong.ogg')
 StartedSong.play();
 StartedSong.loop = false;
-StartedSong.currentTime = 92
 StartedSong.addEventListener('ended', function() {
 this.currentTime = 0;
 this.src = 'assets/bgsong1.ogg';
@@ -53,7 +52,7 @@ function SetVolumes(volume) {
     StartedSong.volume = volume
     } catch (TypeError) {
         StartedSong.volume = 1
-        localStorage.setItem("mastervolume", 1)
+        localStorage.setItem("mastervolume", 1) 
     }
 }
 
@@ -63,13 +62,13 @@ const savedImageData = localStorage.getItem('customBG');
 
 function formatNumber(number) {
     const suffixes = ['', 'K', 'M', 'B', 'T', 'E', 'P', 'V', 'Dd', 'Qd', 'Sd', 'Td', 'Ud', 'Vd', 'Wd', 'Xd', 'Yd', 'Zd'];
-
+    
     let magnitude = 0;
     while (number >= 1000 && magnitude < suffixes.length - 1) {
         number /= 1000;
         magnitude++;
     }
-
+    
     const formattedNumber = number % 1 === 0 ? number.toFixed(0) : number.toFixed(2);
     return formattedNumber + suffixes[magnitude];
 }
@@ -95,13 +94,14 @@ function canPrestigeFunc(level) {
 }
 function createSong(data){
     try{
-    egggg = new Text({text:"loaded"})
-
-    music = new Audio()
-    music.src = data
-    music.play()
-    music.loop = true
-    StartedSong.pause()}
+    StartedSong.pause()
+    StartedSong.src = data
+    StartedSong.play()
+    StartedSong.loop = false
+    StartedSong.volume = volume
+    
+    localStorage.removeItem('audioFile')
+}
     catch(err){console.log(err)}
 }
 let storedFileURL = localStorage.getItem('audioFile')
@@ -109,7 +109,7 @@ if (storedFileURL){
     createSong(storedFileURL)}else{console.log("No data")}
     </script>
 
-<script src="taptapir/taptapir.js"></script>
+    <script src="taptapir/taptapir.js"></script>   
 <script type="text/sunsnake">
 
 #Global Functions
@@ -223,8 +223,15 @@ if allowedAttackSFX == null:
 #Main clicker game
 ClickerDude = Button(texture='Clicker-idle.gif',scale=[.3,.3],y=0)
 ClickerDude.on_click = def():
-    collectiveClick = Gen1Earn/5 * Gen1Owned + Gen2Earn/5 * Gen2Owned + Gen3Earn/5 * Gen3Owned + Gen4Earn/5 * Gen4Owned + Gen5Earn/5 * Gen5Owned + Gen6Earn/5 * Gen6Owned + Gen7Earn/5 * Gen7Owned
-    score += 1 + collectiveClick * clickMultiplier * globalMultiplier 
+    Gen1CPS = .1 * Gen1Owned * gen1Multiplier * globalMultiplier
+    Gen2CPS = 1 * Gen2Owned * gen2Multiplier * globalMultiplier
+    Gen3CPS = 8 * Gen3Owned * gen3Multiplier * globalMultiplier
+    Gen4CPS = 47 * Gen4Owned * gen4Multiplier * globalMultiplier
+    Gen5CPS = 260 * Gen5Owned * gen5Multiplier * globalMultiplier
+    Gen6CPS = 1400 * Gen6Owned * gen6Multiplier * globalMultiplier
+    Gen7CPS = 7800 * Gen7Owned * gen7Multiplier * globalMultiplier
+    collectiveCPS = Gen1CPS + Gen2CPS + Gen3CPS + Gen4CPS + Gen5CPS + Gen6CPS + Gen7CPS
+    score += collectiveCPS/5 + 1
     Playwoosh()
 
 
@@ -250,6 +257,10 @@ settingsButton = Button(texture='settingsCog.webp',scale=.1,x=.8,y=.45)
 settingsButton.on_click = def():
     if not noInteract:
         SmoothTransit("Settings")
+
+AchievementsButton = Button(scale=[.1,.1],texture='trophy.webp',xy=[.65,.45])
+AchievementsButton.on_click = def():
+    SmoothTransit('Achievements')
 
 inShop = False
 ShopButton = Button(texture='shopCog.webp',x=.75,scale=.2,y=-.02)

@@ -6,15 +6,15 @@ body{
 }
 </style>
 <body>
-    <div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
-    <script src="Smooth.js"></script>
-    <script>
+<div id='Smooth' style="z-index: -123;position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;background-color: black; opacity: 1;"></div>
+<script src="Smooth.js"></script>
+<script>
 
 function random_int_(min, max) {//In taptapir but taptap is defined before goodness
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}  
+}
 
 function Playwoosh() {
    if (!allowedAttackSFX) {
@@ -36,17 +36,24 @@ function Playwoosh() {
     })};
 }
 
-petergriffin = new Audio('assets/PeterMorshu.wav')
+petergriffin = new Audio('assets/PeterMorshu.ogg')
 StartedSong = new Audio('assets/bgsong.ogg')
 StartedSong.play();
-StartedSong.loop = true;
+StartedSong.loop = false;
+StartedSong.currentTime = 92
+StartedSong.addEventListener('ended', function() {
+this.currentTime = 0;
+this.src = 'assets/bgsong1.ogg';
+SetVolumes(volume);
+this.play();
+}, false);
 
 function SetVolumes(volume) {
     try {
     StartedSong.volume = volume
     } catch (TypeError) {
         StartedSong.volume = 1
-        localStorage.setItem("mastervolume", 1) 
+        localStorage.setItem("mastervolume", 1)
     }
 }
 
@@ -56,13 +63,13 @@ const savedImageData = localStorage.getItem('customBG');
 
 function formatNumber(number) {
     const suffixes = ['', 'K', 'M', 'B', 'T', 'E', 'P', 'V', 'Dd', 'Qd', 'Sd', 'Td', 'Ud', 'Vd', 'Wd', 'Xd', 'Yd', 'Zd'];
-    
+
     let magnitude = 0;
     while (number >= 1000 && magnitude < suffixes.length - 1) {
         number /= 1000;
         magnitude++;
     }
-    
+
     const formattedNumber = number % 1 === 0 ? number.toFixed(0) : number.toFixed(2);
     return formattedNumber + suffixes[magnitude];
 }
@@ -86,10 +93,23 @@ function canPrestigeFunc(level) {
     else
     {return false}
 }
+function createSong(data){
+    try{
+    egggg = new Text({text:"loaded"})
 
+    music = new Audio()
+    music.src = data
+    music.play()
+    music.loop = true
+    StartedSong.pause()}
+    catch(err){console.log(err)}
+}
+let storedFileURL = localStorage.getItem('audioFile')
+if (storedFileURL){
+    createSong(storedFileURL)}else{console.log("No data")}
     </script>
 
-    <script src="taptapir/taptapir.js"></script>   
+<script src="taptapir/taptapir.js"></script>
 <script type="text/sunsnake">
 
 #Global Functions
@@ -130,10 +150,13 @@ if not startEarningGodlyClicks:
     startEarningGodlyClicks = 0
 
 volume = parseFloat(save_system_load('mastervolume'))
-if volume < 0 or volume > 1:
+if volume < 0 or volume > 1 or volume == null or isNaN(volume):
     volume = 1
     save_system_save('mastervolume', volume)
 
+godlyClicksTracker = int(save_system_load("godlyclickstracker"))
+if not godlyClicksTracker or godlyClicksTracker == null:
+    godlyClicksTracker = 0
 
 Gen1Cost = int(save_system_load('gen1cost'))
 if not Gen1Cost or Gen1Cost == null:
@@ -184,6 +207,10 @@ if not unlockedGenLevels or unlockedGenLevels == null:
 
 friendMode = save_system_load("friendmodeactive")
 
+clickMultiplier = parseFloat(save_system_load('clickmultiplier'))
+if not clickMultiplier:
+    clickMultiplier = 1
+
 SetVolumes(volume);
   
 allowedAttackSFX = save_system_load('attacksfx')
@@ -191,10 +218,13 @@ if allowedAttackSFX == null:
     allowedAttackSFX = True
     save_system_save('attacksfx', allowedAttackSFX)
 
+#TODO: Create proper click multipler because i didnt have time to do it in the lunch break :(
+
 #Main clicker game
 ClickerDude = Button(texture='Clicker-idle.gif',scale=[.3,.3],y=0)
 ClickerDude.on_click = def():
-    score += 1
+    collectiveClick = Gen1Earn/5 * Gen1Owned + Gen2Earn/5 * Gen2Owned + Gen3Earn/5 * Gen3Owned + Gen4Earn/5 * Gen4Owned + Gen5Earn/5 * Gen5Owned + Gen6Earn/5 * Gen6Owned + Gen7Earn/5 * Gen7Owned
+    score += 1 + collectiveClick * clickMultiplier * globalMultiplier 
     Playwoosh()
 
 
@@ -230,6 +260,7 @@ ShopButton.on_click = def():
             save_system_save("metmorshu", 1)
             morshu = Entity(scale=[2,1],z=-1,parent=camera.ui,texture='morshuCUM.gif')
             petergriffin.play()
+            petergriffin.volume = volume
             StartedSong.pause()
             after 3:
                 destroy(morshu)
@@ -272,6 +303,7 @@ Gen1LevelUp.on_click = def():
         gen1Multiplier += .1
         godlyClicks -= Gen1LevelUp.cost
         Gen1LevelUp.cost += 1
+        godlyClicksTracker += 1
 Gen1Info = Text(x=-.49,y=-.3,text=`Cost: ${formatNumber(Gen1Cost)}`,text_size=4.5,enabled=False)
 
 Gen2 = Button(cost=Gen2Cost,texture='clickerGen2.webp',enabled=False,x=-.8,y=-.01)
@@ -292,6 +324,7 @@ Gen2LevelUp.on_click = def():
         gen2Multiplier += .1
         godlyClicks -= Gen2LevelUp.cost
         Gen2LevelUp.cost += 1
+        godlyClicksTracker += 1
 Gen2Info = Text(x=-.49,y=-.6,text=`Cost: ${formatNumber(Gen2Cost)}`,text_size=4.5,enabled=False)
 
 Gen3 = Button(cost=Gen3Cost,texture='clickerGen3.webp',enabled=False,x=-.8,y=-.3)
@@ -312,6 +345,7 @@ Gen3LevelUp.on_click = def():
         gen3Multiplier += .1
         godlyClicks -= Gen3LevelUp.cost
         Gen3LevelUp.cost += 1
+        godlyClicksTracker += 1
 Gen3Info = Text(x=-.49,y=-.9,text=`Cost: ${formatNumber(Gen3Cost)}`,text_size=4.5,enabled=False)
 
 Gen4 = Button(cost=Gen4Cost,texture='ClickerGen4.webp',enabled=False,x=-.3,y=.3)
@@ -332,6 +366,7 @@ Gen4LevelUp.on_click = def():
         gen4Multiplier += .1
         godlyClicks -= Gen4LevelUp.cost
         Gen4LevelUp.cost += 1
+        godlyClicksTracker += 1
 Gen4Info = Text(x=-.05,y=-.3,text=`Cost: ${formatNumber(Gen4Cost)}`,text_size=4.5,enabled=False)
 
 Gen5 = Button(cost=Gen5Cost,texture='ClickerGen5.webp',enabled=False,x=-.3,y=-.01)
@@ -352,6 +387,7 @@ Gen5LevelUp.on_click = def():
         gen5Multiplier += .1
         godlyClicks -= Gen5LevelUp.cost
         Gen5LevelUp.cost += 1
+        godlyClicksTracker += 1
 Gen5Info = Text(x=-.05,y=-.6,text=`Cost: ${formatNumber(Gen5Cost)}`,text_size=4.5,enabled=False)
 
 Gen6 = Button(cost=Gen6Cost,texture='ClickerGen6.webp',enabled=False,x=-.3,y=-.3)
@@ -371,7 +407,8 @@ Gen6LevelUp.on_click = def():
     if godlyClicks >= Gen6LevelUp.cost:
         gen6Multiplier += .1
         godlyClicks -= Gen6LevelUp.cost
-        Gen6LevelUp.cost += 1   
+        Gen6LevelUp.cost += 1  
+        godlyClicksTracker += 1 
 Gen6Info = Text(x=-.05,y=-.9,text=`Cost: ${formatNumber(Gen6Cost)}`,text_size=4.5,enabled=False)
 
 
@@ -393,6 +430,7 @@ Gen7LevelUp.on_click = def():
         gen7Multiplier += .1
         godlyClicks -= Gen7LevelUp.cost
         Gen7LevelUp.cost += 1
+        godlyClicksTracker += 1
 Gen7Info = Text(x=0.635,y=-.68,text=`Cost: ${formatNumber(Gen7Cost)}`,text_size=4.5,enabled=False)
 
 
@@ -404,6 +442,7 @@ if friendMode == 'true' or friendMode == true:
     Gen5.texture = 'KarltonGen.webp'
     Gen6.texture = 'RyanGen.webp'
     Gen7.texture = 'EthanGen.webp'
+    ClickerDude.texture='LeonGen.webp'
 
 canPrestige = False
 prestigeStuffbg = Entity(parent=camera.ui,color=color.black,roundness=.1,xy=[-0.7,0.3],scale=[0.3,0.08],text_size=5)
@@ -480,6 +519,7 @@ def update():
         save_system_save('gen6upgradecost', Gen6LevelUp.cost)
         save_system_save('gen7upgradecost', Gen7LevelUp.cost)
         save_system_save('godlyclicks', godlyClicks)
+        save_system_save('godlyclickstracker', godlyClicksTracker)
         save_system_save('prestigelevel', prestigeLevel)
     catch (err) {;}
     for e in levelUps:
@@ -726,14 +766,14 @@ function earnGodly() {
     const randomX = Math.random() * (maxRangeX - minRangeX) + minRangeX;
 
     if (choices === 0) {
-    godlyClicksEarnBubble = new Button({name:'godlyClicksEarnBubble ', texture:'GodlyClick.png',xy:[randomX,randomY]})
+    godlyClicksEarnBubble = new Button({name:'godlyClicksEarnBubble ', texture:'GodlyClick.webp',xy:[randomX,randomY]})
     godlyClicksEarnBubble.on_click = function() {
         godlyClicks += 1
         bubbleExists=false
         destroy(godlyClicksEarnBubble)
     }}
     else if (choices === 1) {
-    godlyClicksEarnBubble2 = new Button({name:'godlyClicksEarnBubble2 ', texture:'GodlyClick.png',xy:[randomX,randomY]})
+    godlyClicksEarnBubble2 = new Button({name:'godlyClicksEarnBubble2 ', texture:'GodlyClick.webp',xy:[randomX,randomY]})
     godlyClicksEarnBubble2.on_click = function() {
         godlyClicks += 2
         bubbleExists=false
@@ -749,6 +789,6 @@ function stopInterval() {
 }
 
 </script>
-<script src="EarnClicks.js"></script>
+<script src="EarnClicks.js"></script><script src="AchievementHandler.js"></script>
 </body>
 </html>

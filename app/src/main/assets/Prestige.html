@@ -26,7 +26,7 @@ function calculatePrestiges(clicks, currentPrestiges) {
 
   let gainedPrestiges = 0;
 
-  while (clicks >= calculatePrestigeCost(prestiges + 1) && prestiges < maxPrestigeLevels) {
+  while (clicks >= calculatePrestigeCost(prestiges + 1) && prestiges <= maxPrestigeLevels) {
     clicks -= calculatePrestigeCost(prestiges + 1);
     prestiges++;
     gainedPrestiges++;
